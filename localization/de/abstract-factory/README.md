@@ -20,31 +20,30 @@ Das Abstract-Factory-Pattern stellt ein Interface zum Erzeugen von Instanzen ein
 ähnlicher oder voneinander abhängiger Objekte zur Verfügung, ohne dass dabei deren konkrete Klasse
 festgelegt ist. Damit werden Modularität und Flexibilität im Softwaredesign verbessert.
 
-## Detailed Explanation of Abstract Factory Pattern with Real-World Examples
+## Detaillierte Erklärung
+Reales Beispiel
 
-Real-world example
-
-> Imagine a furniture company that uses the Abstract Factory pattern in Java to produce various styles of furniture: modern, Victorian, and rustic. Each style includes products like chairs, tables, and sofas. To ensure consistency within each style, the company uses an Abstract Factory pattern.
+> Stellen Sie sich einen Möbelhersteller vor, der Möbelstücke in verschiedenen Stilen anbietet, z.B. modern, viktorianisch, rustikal. Zu jedem Stil gibt es Produkte wie Stühle, Tische und Sessel. Um Produkte unabhängig vom Stil einheitlich verwalten zu können, wird das Abstract-Factory-Pattern eingesetzt.
 >
-> In this scenario, the Abstract Factory is an interface for creating families of related furniture objects (chairs, tables, sofas). Each concrete factory (ModernFurnitureFactory, VictorianFurnitureFactory, RusticFurnitureFactory) implements the Abstract Factory interface and creates a set of products that match the specific style. This way, clients can create a whole set of modern or Victorian furniture without worrying about the details of their instantiation. This maintains a consistent style and allows easy swapping of one style of furniture for another.
+> Dabei ist die Abstract Factory ein Interface, mit dem mehrere Familien zusammengehöriger Möbelstücke (Stühle, Tische, Sessel) erzeugt werden. Jede einzelne konkrete Factory (ModernFurnitureFactory, VictorianFurnitureFactory, RusticFurnitureFactory) implementiert dieses Interface und erzeugt Möbelstücke des jeweiligen Stils. Auf diese Weise können ganze Einrichtungen in einem bestimmten Stil produziert werden, ohne dass man sich um die Details der Instantiierung kümmern muss. Das erlaubt eine einheitliche Bearbeitung und einen einfachen Wechsel des Einrichtungsstils.
 
-In plain words
+In einfachen Worten
 
-> A factory of factories; a factory that groups the individual but related/dependent factories together without specifying their concrete classes.
+> Eine Factory für Factories - eine Factory, die mehrere zusammengehörende Factories vereinigt, ohne die konkrete Klasse der Objekte festzulegen.
 
-Wikipedia says
+Wikipedia sagt
 
-> The abstract factory pattern provides a way to encapsulate a group of individual factories that have a common theme without specifying their concrete classes
+> Das Abstract-Factory-Pattern dient zur Kapselung einer Gruppe einzelner Factories mit gemeinsamem Thema, wobei deren konkrete Klassse variabel bleibt.
 
-Class diagram
+Klassendiagramm
 
 ![Abstract Factory class diagram](./etc/abstract-factory.urm.png "Abstract Factory class diagram")
 
-## Programmatic Example of Abstract Factory in Java
+## Programmbeispiel
 
-To create a kingdom using the Abstract Factory pattern in Java, we need objects with a common theme. The elven kingdom needs an elven king, elven castle, and elven army whereas the orcish kingdom needs an orcish king, orcish castle, and orcish army. There is a dependency between the objects in the kingdom.
+Um ein Königreich mit dem Abstract-Factory-Pattern zu erzeugen, brauchen wir ein gemeinsames Thema. Das Elben-Königreich hat einen Elbenkönig, ein Elbenschlos und eine Elbenarmee, das Ork-Königreich dagegen einen Orkkönig, ein Orkschloss und eine Orkarmee. Die Objekte des jeweiligen Königreichs hängen voneinander ab.
 
-Translating the kingdom example above. First of all, we have some interfaces and implementation for the objects in the kingdom.
+Zunächst definieren wir die Interfaces und implementieren sie für die einzelnen Königreiche.
 
 ```java
 public interface Castle {
@@ -59,7 +58,7 @@ public interface Army {
     String getDescription();
 }
 
-// Elven implementations ->
+// Elben-Implementationen ->
 public class ElfCastle implements Castle {
     static final String DESCRIPTION = "This is the elven castle!";
 
@@ -87,10 +86,10 @@ public class ElfArmy implements Army {
     }
 }
 
-// Orcish implementations similarly -> ...
+// Ork-Implementations analog -> ...
 ```
 
-Then we have the abstraction and implementations for the kingdom factory.
+Nun kommt das Interface für die Königreich-Factory und seine Implementationen.
 
 ```java
 public interface KingdomFactory {
@@ -119,10 +118,10 @@ public class ElfKingdomFactory implements KingdomFactory {
     }
 }
 
-// Orcish implementations similarly -> ...
+// Ork-Implementationen analog -> ...
 ```
 
-Now, we can design a factory for our different kingdom factories. In this example, we created `FactoryMaker`, responsible for returning an instance of either `ElfKingdomFactory` or `OrcKingdomFactory`. The client can use `FactoryMaker` to create the desired concrete factory which, in turn, will produce different concrete objects (derived from `Army`, `King`, `Castle`). In this example, we also used an enum to parameterize which type of kingdom factory the client will ask for.
+Jetzt können wir eine Factory bauen, die eine Instanz von entweder `ElfKingdomFactory` oder `OrcKingdomFactory` erstellt. Diese nennen wir `FactoryMaker`. Der Client kann `FactoryMaker` verwenden, um die gewünschte Factory zu erzeugen, mit der dann wiederum konkrete Objekte (abgeleitet von `Army`, `King`, `Castle`) erzeugt werden können. In diesem Beispiel nutzen wir ein Enum als Parameter für die gewünschte Art der Factory.
 
 ```java
 public static class FactoryMaker {
@@ -140,7 +139,7 @@ public static class FactoryMaker {
 }
 ```
 
-Here is the main function of our example application:
+Hier die main-Methode der Beispielanwendung:
 
 ```java
 LOGGER.info("elf kingdom");
@@ -156,7 +155,7 @@ LOGGER.info(kingdom.getCastle().getDescription());
 LOGGER.info(kingdom.getKing().getDescription());
 ```
 
-The program output:
+Ausgabe:
 
 ```
 07:35:46.340 [main] INFO com.iluwatar.abstractfactory.App -- elf kingdom
@@ -169,57 +168,56 @@ The program output:
 07:35:46.343 [main] INFO com.iluwatar.abstractfactory.App -- This is the orc king!
 ```
 
-## When to Use the Abstract Factory Pattern in Java
+## Verwendung
 
-Use the Abstract Factory pattern in Java when:
+Einsatzkriterien für Abstract Factory:
+* Das System sollte nicht davon abhängig sein, wie die Produkte erzeugt, zusammengesetzt und dargestellt werden.
+* Nötige Konfiguration für eine oder mehrere Produktfamilien.
+* Eine Familie ähnlicher Produkte muss gemeinsam auf gleiche Art genutzt werden.
+* Die Klassenbibliothek der Produkte zeigt dem Anwender nur ihre Interfaces, nicht ihre Implementation.
+* Abhängigkeiten zwischen den Produkten existieren kürzer als die Verwendung dauert.
+* Abhängigkeiten müssen zur Laufzeit durch Parameter konstruiert werden.
+* Zur Laufzeit wird ein Produkt aus einer Familie ausgewählt.
+* Keine Code-Änderungen bei Hinzufügen weiterer Familien oder Produkte.
 
-* The system should be independent of how its products are created, composed, and represented.
-* You need to configure the system with one of multiple families of products.
-* A family of related product objects must be used together, enforcing consistency.
-* You want to provide a class library of products, exposing only their interfaces, not their implementations.
-* The lifetime of dependencies is shorter than the consumer's lifetime.
-* Dependencies need to be constructed using runtime values or parameters.
-* You need to choose which product to use from a family at runtime.
-* Adding new products or families should not require changes to existing code.
-
-## Abstract Factory Pattern Java Tutorials
+## Tutorials
 
 * [Abstract Factory Design Pattern in Java (DigitalOcean)](https://www.digitalocean.com/community/tutorials/abstract-factory-design-pattern-in-java)
 * [Abstract Factory(Refactoring Guru)](https://refactoring.guru/design-patterns/abstract-factory)
 
-## Benefits and Trade-offs of Abstract Factory Pattern
+## Vor- und Nachteile
 
-Benefits:
+Vorteile:
 
-* Flexibility: Easily switch between product families without code modifications.
+* Flexibilität: Einfacher Wechsel zwischen Produktfamilien ohne Codeänderung.
 
-* Decoupling: Client code only interacts with abstract interfaces, promoting portability and maintainability.
+* Entkopplung: Der Verwender sieht nur abstrakte Interfaces, wodurch sich Portabilität und Wartbarkeit verbessern. 
 
-* Reusability: Abstract factories and products facilitate component reuse across projects.
+* Wiederverwendbarkeit: Objekte aus einer Abstract Factory können projektübergreifend eingesetzt werden.
 
-* Maintainability: Changes to individual product families are localized, simplifying updates.
+* Wartbarkeit: Änderungen an einer einzelnen Produktfamilie sind nur lokal in deren Implementation nötig, was Updates erleichtert.
+* 
+Nachteile:
 
-Trade-offs:
+* Komplexität: Anfänglicher Zusatzaufwand für die Definition von Interfaces und konkreten Factories.
+* 
+* Intransparenz: Die Transparenz könnte leiden, weil der Client-Code mit den Produkten nur indirekt über den Umweg der Factories interagiert.
 
-* Complexity: Defining abstract interfaces and concrete factories adds initial overhead.
+## Reale Anwendungen 
 
-* Indirectness: Client code interacts with products indirectly through factories, potentially reducing transparency.
-
-## Real-World Applications of Abstract Factory Pattern in Java
-
-* Java Swing's `LookAndFeel` classes for providing different look-and-feel options.
-* Various implementations in the Java Abstract Window Toolkit (AWT) for creating different GUI components.
+* Die `LookAndFeel` Klassen von Java Swing stellen mittels Abstract Factory verschiedene optische Darstellungen zur Verfügung.
+* Verschiedene Implementationen im Java Abstract Window Toolkit (AWT) zur Erzeugung diverser GUI-Komponenten.
 * [javax.xml.parsers.DocumentBuilderFactory](http://docs.oracle.com/javase/8/docs/api/javax/xml/parsers/DocumentBuilderFactory.html)
 * [javax.xml.transform.TransformerFactory](http://docs.oracle.com/javase/8/docs/api/javax/xml/transform/TransformerFactory.html#newInstance--)
 * [javax.xml.xpath.XPathFactory](http://docs.oracle.com/javase/8/docs/api/javax/xml/xpath/XPathFactory.html#newInstance--)
 
-## Related Java Design Patterns
+## Verwandte Patterns
 
-* [Factory Method](https://java-design-patterns.com/patterns/factory-method/): Abstract Factory uses Factory Methods to create products.
-* [Singleton](https://java-design-patterns.com/patterns/singleton/): Abstract Factory classes are often implemented as Singletons.
-* [Factory Kit](https://java-design-patterns.com/patterns/factory-kit/): Similar to Abstract Factory but focuses on configuring and managing a set of related objects in a flexible way.
+* [Factory-Methoden](https://java-design-patterns.com/patterns/factory-method/): Abstract Factory verwendet Factory-Methoden zur Erzeugung von Produkten.
+* [Singleton](https://java-design-patterns.com/patterns/singleton/): Abstract-Factory-Klassen sind häufig als Singletons implementiert.
+* [Factory Kit](https://java-design-patterns.com/patterns/factory-kit/): Ähnlich wie Abstract Factory, aber mit Schwerpunkt auf flexibler Konfiguration und Verwaltung verwandter Objekte .
 
-## References and Credits
+## Quellen
 
 * [Design Patterns: Elements of Reusable Object-Oriented Software](https://amzn.to/3w0pvKI)
 * [Design Patterns in Java](https://amzn.to/3Syw0vC)

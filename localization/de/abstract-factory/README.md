@@ -206,7 +206,7 @@ Nachteile:
 ## Reale Anwendungen 
 
 * Die `LookAndFeel` Klassen von Java Swing stellen mittels Abstract Factory verschiedene optische Darstellungen zur Verfügung.
-* Verschiedene Implementationen im Java Abstract Window Toolkit (AWT) zur Erzeugung diverser GUI-Komponenten.
+* Verschiedene Implementationen im Java Abstract Window Toolkit (AWT) verwenden das Pattern zur Erzeugung diverser GUI-Komponenten.
 * [javax.xml.parsers.DocumentBuilderFactory](http://docs.oracle.com/javase/8/docs/api/javax/xml/parsers/DocumentBuilderFactory.html)
 * [javax.xml.transform.TransformerFactory](http://docs.oracle.com/javase/8/docs/api/javax/xml/transform/TransformerFactory.html#newInstance--)
 * [javax.xml.xpath.XPathFactory](http://docs.oracle.com/javase/8/docs/api/javax/xml/xpath/XPathFactory.html#newInstance--)

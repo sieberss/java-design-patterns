@@ -33,7 +33,7 @@ In einfachen Worten
 
 Wikipedia sagt
 
-> Das Abstract-Factory-Pattern dient zur Kapselung einer Gruppe einzelner Factories mit gemeinsamem Thema, wobei deren konkrete Klassse variabel bleibt.
+> Das Abstract-Factory-Pattern dient zur Kapselung einer Gruppe einzelner Factories mit gemeinsamem Thema, wobei deren konkrete Klasse variabel bleibt.
 
 Klassendiagramm
 

@@ -14,7 +14,7 @@ tag:
 
 Active Object bietet eine zuverlässige Methode zur Behandlung asynchroner Prozesse, mit der reaktionsfähige Anwendungen 
 und effizientes Thread-Management gesichert werden.
-Dies wird dadurch erreicht, dass die einzelnen Aufgaben in Objekte gekapselt werden, die in eigenen Threads
+Dies wird dadurch erreicht, dass die einzelnen Aufgaben in Objekte gekapselt werden, die in eigenen Threads (Steuerungsflüssen)
 mit eigener Nachrichtenwarteschlange aktiv sind. Durch diese Trennung bleibt der Hauptthread
 reaktionsfähig und Probleme wie direkte Threadmanipulation oder gemeinsamer Zugriff auf Zustände werden vermieden.
 
@@ -44,7 +44,7 @@ In einfachen Worten
 Wikipedia sagt
 
 > Das Design-Pattern Active Object entkoppelt die Methodenausführung vom Methodenaufruf
-> für Objekte, die in ihrem jeweils eigenen Thread arbeiten.[1]
+> für Objekte, die in ihrem jeweils eigenen Thread arbeiten.
 > Ziel ist, Parallelität dadurch zu ermöglichen, dass Methoden asynchron aufgerufen werden und ein
 > Scheduler die Anfragen organisiert.
 >
@@ -62,11 +62,10 @@ Ablaufdiagramm
 ![Active Object sequence diagram](./etc/active-object-sequence-diagram.png)
 
 
-## Programmatic Example of Active Object in Java
+## Programmbeispiel in Java
 
-This section explains how the Active Object design pattern works in Java, highlighting its use in asynchronous task management and concurrency control.
-
-The Orcs are known for their wildness and untameable soul. It seems like they have their own thread of control based on previous behavior. To implement a creature that has its own thread of control mechanism and expose its API only and not the execution itself, we can use the Active Object pattern.
+Die Orcs sind wilde und nicht zu bändigende Kreaturen. Anscheinend haben sie ihre eigene Steuerung, die nur von ihrem vorherigen Verhalten bestimmt wird.
+Um eine derartige Kreatur zu implementieren, können wir das Active-Objekt-Pattern benutzen.
 
 ```java
 public abstract class ActiveCreature {
@@ -124,9 +123,9 @@ public abstract class ActiveCreature {
 }
 ```
 
-We can see that any class that will extend the `ActiveCreature` class will have its own thread of control to invoke and execute methods.
+Man sieht, dass jede Klasse, die `ActiveCreature` erweitert, ihren eigenen Kontrollfluss für den Aufruf und die Ausführung der Methoden zum Herumstreifen und Essen hat.
 
-For example, the `Orc` class:
+Beispielsweise die Klasse `Orc`:
 
 ```java
 public class Orc extends ActiveCreature {
@@ -136,8 +135,7 @@ public class Orc extends ActiveCreature {
     }
 }
 ```
-
-Now, we can create multiple creatures such as orcs, tell them to eat and roam, and they will execute it on their own thread of control:
+Nun können wir etliche Kreaturen dieser Art schaffen, sie zum Essen und Herumstreifen auffordern, aber jede von ihnen wird das in Eigenregie (eigener Thread) ausführen.
 
 ```java
 public class App implements Runnable {
@@ -173,7 +171,7 @@ public class App implements Runnable {
 }
 ```
 
-Program output:
+Programmausgabe:
 
 ```
 09:00:02.501 [Thread-0] INFO com.iluwatar.activeobject.ActiveCreature -- Orc0 is eating!
@@ -187,48 +185,44 @@ Program output:
 09:00:02.504 [Thread-2] INFO com.iluwatar.activeobject.ActiveCreature -- Orc2 has started to roam in the wastelands.
 ```
 
-## When to Use the Active Object Pattern in Java
+## Verwendung
 
-Use the Active Object pattern in Java when:
-
-* when you need to handle asynchronous tasks without blocking the main thread, ensuring better performance and responsiveness.
-* When you need to interact with external resources asynchronously.
-* When you want to improve the responsiveness of your application.
-* When you need to manage concurrent tasks in a modular and maintainable way.
-
-## Active Object Pattern Java Tutorials
+* Wenn asynchrone Aufgaben behandelt werden sollen, ohne dass der Hauptthread blockiert wird, um bessere Performance und Reaktionsfähigkeit zu gewährleisten.
+* Bei asynchronen Interaktionen mit externen Ressourcen.
+* Zur Verbesserung der Reaktionsfähigkeit.
+* Zum Management parallel ablaufender Aufgaben in modularer und wartbarer Art und Weise.
+* 
+## Tutorials
 
 * [Android and Java Concurrency: The Active Object Pattern(Douglas Schmidt)](https://www.youtube.com/watch?v=Cd8t2u5Qmvc)
 
-## Real-World Applications of Active Object Pattern in Java
+## Reale Anwendungen in Java
 
-* Real-time trading systems where transaction requests are handled asynchronously.
-* GUIs where long-running tasks are executed in the background without freezing the user interface.
-* Game programming to handle concurrent updates to game state or AI computations.
+* Echtzeit-Handelssysteme mit asynchroner Verarbeitung von Transaktionen.
+* GUIs, bei denen langwierige Arbeiten im Hintergrund ablaufen, ohne dass die Benutzeroberfläche einfriert.
+* Spiele, bei denen Aktualisierungen des Spielstatus oder KI-Berechnungen parallel abgearbeitet werden.
 
-## Benefits and Trade-offs of Active Object Pattern
+## Vor- und Nachteile
 
-Discover the benefits and trade-offs of using the Active Object pattern in Java, including improved thread safety and potential overhead concerns.
+Vorteile
 
-Benefits:
+* Reaktionsfähigkeit des Hauptthreads wird verbessert
+* Parallelitätsprobleme sind in den Objekten gekapselt
+* Ermöglicht bessere Codeorganisation und -wartbarkeit.
+* Sorgt für Threadsicherheit und vermeidet Probleme beim gemeinsamen Zugriff auf Zustände.
+  
+Nachteile
 
-* Improves responsiveness of the main thread.
-* Encapsulates concurrency concerns within objects.
-* Promotes better code organization and maintainability.
-* Provides thread safety and avoids shared state access problems.
+* Zusatzaufwand für die Übermittlung von Benachrichtigungen und das Threadmanagement. 
+* Nicht für alle Arten von Nebenläufigkeitsproblemen geeignet.
 
-Trade-offs:
+## Verwandte Patterns
 
-* Introduces additional overhead due to message passing and thread management.
-* May not be suitable for all types of concurrency problems.
+* [Command](https://java-design-patterns.com/patterns/command/): Kapselt Anfragen als Objekte, ähnlich wie Active Object es mit Methodenaufrufen macht.
+* [Promise](https://java-design-patterns.com/patterns/promise/): Bietet einen Weg zur Abfrage von Ergebnissen eines asynchronen Methodenaufrufs, oft mit Active Object kombiniert.
+* [Proxy](https://java-design-patterns.com/patterns/proxy/): Active Object kann einen Proxy verwenden, um asynchrone Methodenaufrufe zu behandeln. 
 
-## Related Java Design Patterns
-
-* [Command](https://java-design-patterns.com/patterns/command/): Encapsulates a request as an object, similarly to how the Active Object pattern encapsulates method calls.
-* [Promise](https://java-design-patterns.com/patterns/promise/): Provides a means to retrieve the result of an asynchronous method call, often used in conjunction with Active Object.
-* [Proxy](https://java-design-patterns.com/patterns/proxy/): The Active Object pattern can use a proxy to handle method invocations asynchronously.
-
-## References and Credits
+## Quellen
 
 * [Design Patterns: Elements of Reusable Object Software](https://amzn.to/3HYqrBE)
 * [Concurrent Programming in Java: Design Principles and Patterns](https://amzn.to/498SRVq)

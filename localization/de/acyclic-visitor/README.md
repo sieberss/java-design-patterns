@@ -11,7 +11,7 @@ tag:
 
 ## Zweck
 
-Das Acyclic-Visitor-Pattern entkoppelt Operationen von der Objekthierarchie und erlaubt so ein flexibles Design für verschiendenste Anwendungen.
+Das Acyclic-Visitor-Pattern entkoppelt Operationen von der Objekthierarchie und erlaubt so ein flexibles Design für verschiedenste Anwendungen.
 
 ## Detailierte Erklärung
 

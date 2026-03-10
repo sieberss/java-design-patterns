@@ -32,7 +32,7 @@ indem es isolierte Komponenten (Akteure) verwendet, die ausschließlich über as
 Stellen Sie sich ein Kundendienstsystem vor.
 - Jeder **Kundendienstmitarbeiter** ist ein **Aktor**.
 - Kunden **senden Anfragen (Nachrichten)** an die Mitarbeiter.
-- Jeder Mitarbeiter behandelt zu einem bestimmten Zeitpunkt genau eine Anfrage und kann diese **asychron beantworten**,
+- Jeder Mitarbeiter behandelt zu einem bestimmten Zeitpunkt genau eine Anfrage und kann diese **asynchron beantworten**,
 - ohne dabei anderen Mitarbeitern in die Quere zu kommen.
 
 ---
@@ -172,7 +172,7 @@ public class App {
 ## Vor- und Nachteile
 
 ### ✅ Benefits
-- Unterstützt hohes Maß an Parellelität
+- Unterstützt hohes Maß an Parallelität
 - Leichte Skalierbarkeit über Zahl der Threads oder Prozessoren.
 - Fehlerisolation und -behebbarkeit.
 - Geordnete Nachrichten in den Aktoren

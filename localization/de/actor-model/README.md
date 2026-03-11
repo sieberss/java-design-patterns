@@ -171,13 +171,13 @@ public class App {
 
 ## Vor- und Nachteile
 
-### ✅ Benefits
+### ✅ Vorteile
 - Unterstützt hohes Maß an Parallelität
 - Leichte Skalierbarkeit über Zahl der Threads oder Prozessoren.
 - Fehlerisolation und -behebbarkeit.
 - Geordnete Nachrichten in den Aktoren
 
-### ⚠️ Trade-offs
+### ⚠️ Nachteile
 - Schwierigeres Debugging wegen asynchronen Verhaltens
 - Leichte Performance-Einbußen durch die Nachrichten-Warteschlangen
 - Komplexeres Design als bei einfachem Methodenaufruf

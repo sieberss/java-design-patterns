@@ -33,7 +33,7 @@ Stellen Sie sich ein Kundendienstsystem vor.
 - Jeder **Kundendienstmitarbeiter** ist ein **Aktor**.
 - Kunden **senden Anfragen (Nachrichten)** an die Mitarbeiter.
 - Jeder Mitarbeiter behandelt zu einem bestimmten Zeitpunkt genau eine Anfrage und kann diese **asynchron beantworten**,
-- ohne dabei anderen Mitarbeitern in die Quere zu kommen.
+ohne dabei anderen Mitarbeitern in die Quere zu kommen.
 
 ---
 

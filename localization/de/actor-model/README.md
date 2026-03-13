@@ -63,7 +63,9 @@ ohne dabei anderen Mitarbeitern in die Quere zu kommen.
 ```java
 public abstract class Actor implements Runnable {
 
-    @Setter @Getter private String actorId;
+    @Setter
+    @Getter
+    private String actorId;
     private final BlockingQueue<Message> mailbox = new LinkedBlockingQueue<>();
     private volatile boolean active = true; 
 
@@ -124,7 +126,7 @@ public class ActorSystem {
 ```java
 public class App {
   public static void main(String[] args) {
-    ActorSystem system = new ActorSystem();
+      ActorSystem system = new ActorSystem();
       Actor srijan = new ExampleActor(system);
       Actor ansh = new ExampleActor2(system);
 

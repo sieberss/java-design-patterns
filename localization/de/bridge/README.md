@@ -42,7 +42,7 @@ In einfachen Worten
 
 Wikipedia sagt
 
-> Das Bride-Pattern ist ein Entwurfsmuster der Softwareentwicklung mit dem Zweck,
+> Das Bridge-Pattern ist ein Entwurfsmuster der Softwareentwicklung mit dem Zweck,
 > eine Abstraktion von ihrer Implementierung zu trennen, so dass beide unabhängig voneinander angepasst werden können.
 
 Ablaufdiagramm
@@ -233,8 +233,8 @@ Das Bridge-Pattern kommt in diesen Fällen in Betracht:
 * Die Hierarchie enthält eine große Anzahl Klassen, was dafür spricht, Objekte in zwei Teile zu spalten.
   Dieses Konzept wird von Rumbaugh als "verschachtelte Generalisierungen" bezeichnet.
 * Sie wollen eine Implementation mit mehreren Objekten teilen, eventuell unter Verwendung von
-  Referenzzählerm, dabei aber dieses Detail aber vor den Verwendern verstecken. Beispiel dafür
-  ist Copliens String-Klasse, wo mehrere Objekte die gleiche Stringdarstellung haben.
+  Referenzzählern, dabei aber dieses Detail aber vor den Verwendern verstecken. Beispiel dafür
+  ist die String-Klasse von Coplien, wo mehrere Objekte die gleiche Stringdarstellung haben.
 
 ## Tutorials
 

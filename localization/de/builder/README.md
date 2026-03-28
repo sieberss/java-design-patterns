@@ -26,13 +26,12 @@ Beispiel aus der realen Welt
 > Schritt alle gewünschten Komponenten angeben, um genau das gewünschte Sandwich zu erhalten.
 > Diese Trennung der Konstruktion vom fertigen Produkt stellt sicher, dass viele verschiedene
 > Sandwichtypen aus den Komponenten konstruiert werden können.
-> on the specified components.
 
 In einfachen Worten
 
 > Man kann verschiedene Formen eines Objekts erzeugen, ohne eine Vielzahl von Konstruktoren
 > oder einen Konstruktor mit vielen Parametern zu benötigen. Nützlich, wenn ein Objekt in
-> mehreren Geschmacksrichtigungen auftauchen kann, oder wenn die Erzeugung des Objekts aus
+> mehreren Geschmacksrichtungen auftauchen kann, oder wenn die Erzeugung des Objekts aus
 > vielen Schritten besteht.
 
 Wikipedia sagt
@@ -207,9 +206,6 @@ Nachteile:
 
 * Der Code kann insgesamt komplexer werden, weil zusätzliche Klassen benötigt werden.
 * Durch die Builder-Objekte kann sich der Speicherverbrauch erhöhen.
-* The overall complexity of the code can increase since the pattern requires creating
-* multiple new classes
-* May increase memory usage due to the necessity of creating multiple builder objects
 
 ## Verwandte Patterns
 

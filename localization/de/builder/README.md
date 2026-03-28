@@ -10,7 +10,7 @@ tag:
 ## Zweck
 
 Das Builder-Pattern ist ein fundamentales Erzeugungsmuster, mit dem komplexe Objekte schrittweise konstruiert werden.
-Es trennt die Konstruktion eines komplexen Objekts von seiner Darstellung, so mit dem gleichen
+Es trennt die Konstruktion eines komplexen Objekts von seiner Darstellung, sodass im gleichen
 Konstruktionsprozess verschiedene Ausprägungen erzeugt werden können.
 
 ## Detaillierte Erklärung
@@ -61,9 +61,8 @@ Ablaufdiagramm
 In diesem Beispiel konstruieren wir verschiedene Typen von `Hero`-Objekten mit wechselnden Attributen.
 
 Stellen Sie sich einen Charakter-Generator in einem Rollenspiel vor. Die einfachste Option ist es,
-den Charakter vom Computer erstellen zu lassen. Manchmal will der Spieler aber selbst bestimmte
-Eigenschaften des Charakters auswählen, etwa Beruf, Geschlecht, Haarfarbe etc. Dann ist die
-Erzeugung ein schrittweiser Prozess, der erst abgeschlossen ist, wenn alle gewünschten Eigenschaften
+den Charakter komplett vom Computer erstellen zu lassen. Manchmal will der Spieler aber selbst bestimmte
+Eigenschaften des Charakters auswählen, etwa Beruf, Geschlecht, Haarfarbe etc. Dies ist ein schrittweiser Prozess, der erst abgeschlossen ist, wenn alle gewünschten Eigenschaften
 festgelegt wurden.
 
 Mit dem Builder-Pattern gibt es einen besseren Ansatz dafür.

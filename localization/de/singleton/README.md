@@ -40,7 +40,7 @@ Wikipedia sagt
 
 Ablaufdiagramm
 
-![Singleton Pattern sequence diagram](./etc/singleton-sequence-diagram.png)
+![Singleton Pattern sequence diagram](/singleton/etc/singleton-sequence-diagram.png)
 
 ## Programmbeispiel
 

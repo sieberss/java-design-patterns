@@ -37,7 +37,7 @@ Wikipedia sagt
 
 Klassendiagramm
 
-![Abstract Factory class diagram](./etc/abstract-factory.urm.png "Abstract Factory class diagram")
+![Abstract Factory class diagram](/abstract-factory/etc/abstract-factory.urm.png "Abstract Factory class diagram")
 
 ## Programmbeispiel
 

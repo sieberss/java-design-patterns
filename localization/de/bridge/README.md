@@ -47,7 +47,7 @@ Wikipedia sagt
 
 Ablaufdiagramm
 
-![Bridge sequence diagram](./etc/bridge-sequence-diagram.png)
+![Bridge sequence diagram](/bridge/etc/bridge-sequence-diagram.png)
 
 ## Programmbeispiel
 

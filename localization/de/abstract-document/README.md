@@ -33,7 +33,7 @@ Wikipedia sagt
 
 ## Klassendiagramm
 
-![Abstract Document](./etc/abstract-document.png "Abstract Document Traits und Domain")
+![Abstract Document](/abstract-document/etc/abstract-document.png "Abstract Document Traits und Domain")
 
 ## Beispielprogramm in Java
 

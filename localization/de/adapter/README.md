@@ -43,7 +43,7 @@ Wikipedia sagt
 
 Ablaufdiagramm
 
-![Adapter sequence diagram](./etc/adapter-sequence-diagram.png "Adapter sequence diagram")
+![Adapter sequence diagram](/adapter/etc/adapter-sequence-diagram.png "Adapter sequence diagram")
 
 ## Programmbeispiel
 

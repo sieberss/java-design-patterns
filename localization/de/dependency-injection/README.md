@@ -43,7 +43,7 @@ Wikipedia sagt
 
 Ablaufdiagramm
 
-![Dependency Injection sequence diagram](./etc/dependency-injection-sequence-diagram.png)
+![Dependency Injection sequence diagram](/dependency-injection/etc/dependency-injection-sequence-diagram.png)
 
 ## Programmbeispiel
 

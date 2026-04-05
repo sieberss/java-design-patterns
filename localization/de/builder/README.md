@@ -54,7 +54,7 @@ Dies wird als Telescoping-Constructor-Antipattern bezeichnet.
 
 Ablaufdiagramm
 
-![Builder sequence diagram](./etc/builder.urm.png)
+![Builder sequence diagram](/builder/etc/builder-sequence-diagram.png)
 
 ## Programmbeispiel
 

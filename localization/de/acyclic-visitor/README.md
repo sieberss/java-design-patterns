@@ -35,7 +35,7 @@ In einfachen Worten
 
 Ablaufdiagramm
 
-![Acyclic Visitor sequence diagram](./etc/acyclic-visitor-sequence-diagram.png "Acyclic Visitor sequence diagram")
+![Acyclic Visitor sequence diagram](/acyclic-visitor/etc/acyclic-visitor-sequence-diagram.png "Acyclic Visitor sequence diagram")
 
 
 ## Programmbeispiel

@@ -59,7 +59,7 @@ Wikipedia sagt
 
 Ablaufdiagramm
 
-![Active Object sequence diagram](./etc/active-object-sequence-diagram.png)
+![Active Object sequence diagram](/active-object/etc/active-object-sequence-diagram.png)
 
 
 ## Programmbeispiel in Java

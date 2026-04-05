@@ -1,137 +1,168 @@
 ---
-title: Adapter
 shortTitle: Adapter
 category: Structural
-language: es
+language: de
 tag:
- - Gang of Four
+  - Compatibility
+  - Decoupling
+  - Gang of Four
+  - Interface
+  - Object composition
+  - Wrapping
 ---
 
-## También conocido como
-Wrapper
+## Alternativbezeichnung
 
-## Propósito
-Convertir la interfaz de una clase en otra que espera el cliente. El patrón Adapter permite a clases funcionar en conjunto con otras clases con las que no podrían de otra forma por problemas de compatibilidad.
+* Wrapper
 
-## Explicación
+## Zweck
 
-Ejemplo del mundo real
+Das Adapter-Pattern konvertiert die Schnittstelle einer Klasse in eine andere Schnittstelle, die zu den Bedürfnissen der Anwender passt, und sorgt so für Kompatibilität.
 
-> Imagina que tienes unas imágenes en una tarjeta de memoria y quieres transferirlas a tu ordenador. Para transferirlas necesitas algún tipo de adaptador compatible con los puertos de tu ordenador que te permita introducir tu tarjeta. En este caso el lector de tarjetas es un adaptador (adapter).
-> Otro ejemplo podría ser el famoso adaptador de corriente; un enchufe con tres patas no se puede conectar a una toma de corriente con dos agujeros, necesita un adaptador para hacerlo compatible con la toma de corriente.
-> Otro ejemplo más sería un traductor traduciendo palabras de una persona para otra.
+## Detaillierte Erklärung
+Vergleich mit der analogen Welt
 
-En otras palabras
+> Stellen Sie sich vor, Sie haben einige Bilder auf Ihrer Speicherkarte und wollen diese auf
+> Ihren Computer übertragen. Dafür brauchen Sie einen Kartenleser, der mit den Anschlüssen des Rechners
+> kompatibel ist, sodass dieser auf die Daten auf der Karten zugreifen kann. Dieser Kartenleser
+> ist ein Beispiel für einen Adapter.
+> Ein anderes Beispiel sind die Adapter, mit denen man deutsche Netzstecker in ausländischen
+> Steckdosen verwenden kann, in die sie sonst nicht passen würden. Auch ein Übersetzer, der die
+> Worte eines Sprechers in die Sprache des ausländischen Publikums übersetzt, erfüllt die Funktion eines Adapters.
 
-> El patrón Adapter permite envolver un objeto en un adaptador para hacerlo compatible con una clase con la que sería incompatible de otra manera.
+In einfachen Worten
 
-Según Wikipedia
+> Das Adapter-Pattern verpackt ein normalerweise inkompatibles Objekt so, dass es mit einer
+> anderen Klasse kompatibel wird.
 
-> En ingeniería de software el patrón Adapter es un patrón de diseño de software que permite usar la interfaz de una clase existente como otra interfaz diferente. A menudo es utilizado para hacer que clases existentes trabajen con otras clases sin necesidad de modificar su código fuente.
+Wikipedia sagt
 
-**Ejemplo Programático**
+> Das Adapter-Pattern in der Softwareentwicklung ist ein Entwurfsmuster,
+> das die Schnittstelle einer bestehenden Klasse im Rahmen einer neuen Schnittstelle nutzbar macht.
+> Es wird oft verwendet, damit Klassen zusammenarbeiten können, ohne ihren Quellcode zu verändern.
 
-Toma como ejemplo un capitán que solo puede usar botes de remo y no puede navegar en absoluto.
+Ablaufdiagramm
 
-Primero tenemos las interfaces `RowingBoat` (bote de remo) y `FishingBoat` (bote de pesca).
+![Adapter sequence diagram](./etc/adapter-sequence-diagram.png "Adapter sequence diagram")
+
+## Programmbeispiel
+
+Betrachten wir einen Möchtegern-Kapität, der zwar rudern kann, aber noch nie gesegelt ist.
+
+Wir beginnen mit dem Interface `RowingBoat` und der Klasse `FishingBoat`
 
 ```java
 public interface RowingBoat {
-  void row();
+    void row();
 }
 
-@Slf4j
 public class FishingBoat {
-  public void sail() {
-    LOGGER.info("The fishing boat is sailing");
-  }
+    public void sail() {
+        LOGGER.info("The fishing boat is sailing");
+    }
 }
 ```
 
-Y el capitán espera una implementación de la interfaz `RowingBoat` (bote de remo) para poder moverse.
+Der Kapität erwartet, dass sich ein Schiff mit der `row`-Methode von `RowingBoat` steuern lässt.
 
 ```java
 public class Captain {
 
-  private final RowingBoat rowingBoat;
-  // default constructor and setter for rowingBoat
-  public Captain(RowingBoat rowingBoat) {
-    this.rowingBoat = rowingBoat;
-  }
+    private final RowingBoat rowingBoat;
 
-  public void row() {
-    rowingBoat.row();
-  }
+    public Captain(RowingBoat rowingBoat) {
+        this.rowingBoat = rowingBoat;
+    }
+
+    public void row() {
+        rowingBoat.row();
+    }
 }
 ```
 
-Ahora supongamos que viene un grupo de piratas y nuestro capitán tiene que escapar, pero solo hay un bote de pesca. Necesitamos crear un adaptador que permita al capitán usar el bote de pesca con sus habilidades para usar botes de remo.
+Nun kommen Piraten und unser Kapitän muss fliehen, hat aber nur ein Fischerboot zur Verfügung.
+Wir brauchen einen Adapter, mit dem er auch dieses Boot durch Rudern steuern kann.
 
 ```java
-@Slf4j
 public class FishingBoatAdapter implements RowingBoat {
 
-  private final FishingBoat boat;
+    private final FishingBoat boat;
 
-  public FishingBoatAdapter() {
-    boat = new FishingBoat();
-  }
+    public FishingBoatAdapter() {
+        boat = new FishingBoat();
+    }
 
-  @Override
-  public void row() {
-    boat.sail();
-  }
+    @Override
+    public void row() {
+        boat.sail();
+    }
 }
 ```
 
-Y ahora el `Captain` (capitán) puede usar el `FishingBoat` (bote de pesca) para escapar de los piratas.
+Nun segelt das `FishingBoat`, indem der Kapitän rudert, und er kann fliehen.
 
 ```java
-var captain = new Captain(new FishingBoatAdapter());
-captain.row();
+  public static void main(final String[] args) {
+    // The captain can only operate rowing boats but with adapter he is able to
+    // use fishing boats as well
+    var captain = new Captain(new FishingBoatAdapter());
+    captain.row();
+}
 ```
 
-## Diagrama de clases
-![alt text](./etc/adapter.urm.png "Adapter class diagram")
+Programmausgabe:
 
-## Aplicación
-Usa el patrón Adapter cuando
+```
+10:25:08.074 [main] INFO com.iluwatar.adapter.FishingBoat -- The fishing boat is sailing
+```
 
-* Quieres usar una clase existente y su interfaz no coincide con la que necesitas.
-* Quieres crear una clase reutilizable que coopere con clases que no están relacionadas o con las que su cooperación no estaba planeada, esto es, clases que no necesariamente tienen interfaces compatibles.
-* Necesitas usar varias subclases existentes, pero no es práctico adaptar su interfaz creando subclases para todas. Un adaptador puede adaptar la interfaz de la clase padre.
-* Muchas aplicaciones que usan librerías de terceros usan adaptadores como capas intermedias entre la aplicación y la librería para desacoplar la aplicación de la librería. Si es necesario usar otra librería solo hace falta crear un adaptador para la nueva librería sin necesidad de modificar el código de la aplicación.
+## Verwendung
+Das Adapter-Pattern ist geeignet für diese Fälle
+* Sie wollen eine bestehende Klasse benutzen, deren Schnittstelle anders als benötigt ist.
+* Sie wollen eine wiederverwendbare Klasse schreiben, die auch mit fremden Klassen zusammen
+  arbeiten kann, die nicht unbedingt kompatible Schnittstellen haben.
+* Sie müssen verschiedene Tochterklassen verwenden, bei denen es zu aufwendig wäre, zu jeder einzelnen eine Subklasse mit angepasster Schnittstelle zu erstellen.
+  Ein Adapter kann die Schnittstelle der Elternklasse bedarfsgerecht anpassen.
+* Die meisten Anwendungen, die Fremdbibliotheken verwenden, nutzen einen Adapter für die Fremdklassen,
+  um die eigenen Anwendung vom fremden zu entkoppeln. 
 
-## Tutoriales
+## Tutorials
 
-* [Dzone](https://dzone.com/articles/adapter-design-pattern-in-java)
-* [Refactoring Guru](https://refactoring.guru/design-patterns/adapter/java/example)
-* [Baeldung](https://www.baeldung.com/java-adapter-pattern)
+* [Using the Adapter Design Pattern in Java (Dzone)](https://dzone.com/articles/adapter-design-pattern-in-java)
+* [Adapter in Java (Refactoring Guru)](https://refactoring.guru/design-patterns/adapter/java/example)
+* [The Adapter Pattern in Java (Baeldung)](https://www.baeldung.com/java-adapter-pattern)
+* [Adapter Design Pattern (GeeksForGeeks)](https://www.geeksforgeeks.org/adapter-pattern/)
 
-## Consecuencias
-Los adaptadores de clases y objetos tienen distintas cualidades. Un adaptador de clases
+## Vor- und Nachteile
 
-*	Hace la adaptación quedando enlazado a una clase adaptada concreta. Como consecuencia un adaptador de clases no funcionará cuando queramos adaptar una clase y sus subclases.
-*	Permite al adaptador modificar el comportamiento de la clase adaptada porque el adaptador es una subclase de la clase adaptada.
-*	Usa un solo objeto y no es necesario usar punteros adicionales para referenciar la clase adaptada.
+Die Vor- und Nachteile hängen davon ab, ob ein Klassen- oder ein Objektadapter implementiert wird.
 
-Un adaptador de objetos
+Ein Klassenadapter adaptiert durch Bindung an eine spezifische zu adaptierende Klasse. 
+Er kann das Verhalten der zu adaptierenden Klasse überschreiben, weil er
+als deren Tochterklasse implementiert wird. 
+Das hat allerdings zur Folge, dass mit einer Klasse nicht auch all ihre Subklassen adaptiert werden können.
+Bei diesem Adaptertyp wird lediglich ein neues Objekt eingeführt, ohne
+dass mit einem extra Zeiger der Zugriff darauf ermöglicht werden muss.
 
-*	Permite a un solo adaptador trabajar con varias clases, esto es, con la clase adaptada y todas sus subclases (si tiene alguna). El adaptador también puede añadir funcionalidad a todas las clases adaptadas a la vez.
-*	Hace más complicado modificar el comportamiento de la clase adaptada. Sería necesario hacer una subclase de la clase a adaptar y hacer que el adaptador referencie la subclase en lugar de la clase a adaptar.
+Ein Objektadapter hingegen kann mit verschiedenen zu adaptierenden Klassen arbeiten, auch mit
+allen Subklassen. Er kann  allen adaptierten Klassen zugleich Funktionalität hinzufügen.
+Allerdings wird es damit schwerer, das Verhalten zu überschreiben, weil man dafür eine 
+Subklasse der adaptierten Klasse benötigt und der Adapter sich auf diese Subklasse statt
+auf die ursprünglich adaptierte Klasse beziehen muss.
 
+## Reale Java-Anwendungen
 
-## Ejemplos del mundo real
-
+* `java.io.InputStreamReader` and `java.io.OutputStreamWriter` in der Java-IO-Bibliothek.
+* GUI-Komponentenbibliotheken, die per Plugin oder Adapter zwischen verschiedenen Kompontentenschnittstellen konvertieren können.
 * [java.util.Arrays#asList()](http://docs.oracle.com/javase/8/docs/api/java/util/Arrays.html#asList%28T...%29)
 * [java.util.Collections#list()](https://docs.oracle.com/javase/8/docs/api/java/util/Collections.html#list-java.util.Enumeration-)
 * [java.util.Collections#enumeration()](https://docs.oracle.com/javase/8/docs/api/java/util/Collections.html#enumeration-java.util.Collection-)
 * [javax.xml.bind.annotation.adapters.XMLAdapter](http://docs.oracle.com/javase/8/docs/api/javax/xml/bind/annotation/adapters/XmlAdapter.html#marshal-BoundType-)
 
+## Quellen
 
-## Créditos
-
-* [Design Patterns: Elements of Reusable Object-Oriented Software](https://www.amazon.com/gp/product/0201633612/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=0201633612&linkCode=as2&tag=javadesignpat-20&linkId=675d49790ce11db99d90bde47f1aeb59)
-* [J2EE Design Patterns](https://www.amazon.com/gp/product/0596004273/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=0596004273&linkCode=as2&tag=javadesignpat-20&linkId=48d37c67fb3d845b802fa9b619ad8f31)
-* [Head First Design Patterns: A Brain-Friendly Guide](https://www.amazon.com/gp/product/0596007124/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=0596007124&linkCode=as2&tag=javadesignpat-20&linkId=6b8b6eea86021af6c8e3cd3fc382cb5b)
-* [Refactoring to Patterns](https://www.amazon.com/gp/product/0321213351/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=0321213351&linkCode=as2&tag=javadesignpat-20&linkId=2a76fcb387234bc71b1c61150b3cc3a7)
+* [Design Patterns: Elements of Reusable Object-Oriented Software](https://amzn.to/3w0pvKI)
+* [Effective Java](https://amzn.to/4cGk2Jz)
+* [Head First Design Patterns: Building Extensible and Maintainable Object-Oriented Software](https://amzn.to/49NGldq)
+* [J2EE Design Patterns](https://amzn.to/4dpzgmx)
+* [Refactoring to Patterns](https://amzn.to/3VOO4F5)

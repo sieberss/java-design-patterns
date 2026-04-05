@@ -88,6 +88,7 @@ public abstract class AbstractDocument implements Document {
     // Weitere Eigenschaften und Methoden...
 }
 ```
+
 Als nächstes definieren wir ein Enum `Property` und je eine Schnittstelle für Typ, Preis, Modell und Teile. So können wir eine statisch aussehende Schnittstelle für unsere Klasse `Car` erstellen.
 
 ```java
@@ -163,7 +164,7 @@ var car = new Car(carProperties);
         LOGGER.info("-> price: {}", car.getPrice().orElseThrow());
         LOGGER.info("-> parts: ");
     car.getParts().forEach(p -> LOGGER.info("\t{}/{}/{}",
-                                            p.getType().orElse(null),
+            p.getType().orElse(null),
             p.getModel().orElse(null),
             p.getPrice().orElse(null))
     );

@@ -1,76 +1,94 @@
 ---
-title: Builder
 shortTitle: Builder
-category: Creational
-language: es
+language: de
 tag:
   - Gang of Four
+  - Instantiation
+  - Object composition
 ---
 
-## Propósito
+## Zweck
 
-Separar la construcción de un objeto complejo de su representación para que el mismo proceso de
-construcción pueda crear diferentes representaciones.
+Das Builder-Pattern ist ein fundamentales Erzeugungsmuster, mit dem komplexe Objekte schrittweise konstruiert werden.
+Es trennt die Konstruktion eines komplexen Objekts von seiner Darstellung, sodass im gleichen
+Konstruktionsprozess verschiedene Ausprägungen erzeugt werden können.
 
-## Explicación
+## Detaillierte Erklärung
 
-Ejemplo real
+Beispiel aus der realen Welt
 
-> Imagina un generador de personajes para un juego de rol. La opción más fácil es dejar que el ordenador
-> cree el personaje por ti. Si quieres seleccionar manualmente los detalles del personaje como
-> profesión, sexo, color de pelo, etc. la generación del personaje se convierte en un proceso paso a paso que
-> se completa cuando todas las selecciones están listas.
+> Das Builder-Pattern ist besonders nützlich, wenn zur Erzeugung eines Objekts viele Parameter benötigt werden.
+>
+> Stellen Sie sich vor, Sie bestellen ein individuell zusammengestelltes Sandwich.
+> Das Builder-Pattern stellt dafür einen SandwichBuilder bereit, mit dem Sie jede einzelne
+> Komponente auswählen können (Brotart, Fleisch, Käse, Gemüse, Würzung). Sie müssen nicht
+> wissen, wie man so ein Sandwich tatsächlich zusammenbaut. Es genügt, dass Sie Schritt für
+> Schritt alle gewünschten Komponenten angeben, um genau das gewünschte Sandwich zu erhalten.
+> Diese Trennung der Konstruktion vom fertigen Produkt stellt sicher, dass viele verschiedene
+> Sandwichtypen aus den Komponenten konstruiert werden können.
 
-En pocas palabras
+In einfachen Worten
 
-> Permite crear diferentes sabores de un objeto evitando la contaminación del constructor. Útil
-> cuando puede haber varios sabores de un objeto. O cuando hay muchos pasos involucrados en la creación de un objeto.
-> creación de un objeto.
+> Man kann verschiedene Formen eines Objekts erzeugen, ohne eine Vielzahl von Konstruktoren
+> oder einen Konstruktor mit vielen Parametern zu benötigen. Nützlich, wenn ein Objekt in
+> mehreren Geschmacksrichtungen auftauchen kann, oder wenn die Erzeugung des Objekts aus
+> vielen Schritten besteht.
 
-Wikipedia dice
+Wikipedia sagt
 
-> El patrón constructor es un patrón de diseño de software de creación de objetos con la intención de encontrar
-> una solución al anti-patrón del constructor telescópico.
+> Das Builder-Pattern ist ein Entwurfsmuster zur Objekterzeugung, das eine Lösung für
+> das Telescoping-Constructor-Antipattern bieten will.
 
-
-Dicho esto, permíteme agregar un poco sobre qué es el anti-patrón del constructor telescópico. En algún momento  
-u otro, todos hemos visto un constructor como el siguiente:
+Was hat es mit diesem Antipattern auf sich? 
+Irgendwann treffen wir alle auf solche Konstruktoren:
 
 ```java
-public Hero(Profession profession, String name, HairType hairType, HairColor hairColor, Armor armor, Weapon weapon) {
+public Hero(Profession profession, String name, HairType hairType, HairColor hairColor, Armor armor, Weapon weapon){
+    // Wertzuweisungen
 }
 ```
+Sie sehen, die Zahl der Parameter im Konstruktor kann schnell unübersichtlich werden, so dass 
+schwer zu erkennen ist, welche benötigt werden und in welcher Reihenfolge sie stehen müssen.
+Dieses Problem verstärkt sich, wenn später noch weitere Optionen hinzugefügt werden.
+Dies wird als Telescoping-Constructor-Antipattern bezeichnet.
 
-Como puedes ver, el número de parámetros del constructor puede salirse rápidamente de control, y puede volverse difícil
-entender la disposición de los parámetros. Además, esta lista de parámetros podría seguir creciendo si quisieras agregar
-más opciones en el futuro. A esto se le llama anti-patrón del constructor telescópico.
+Ablaufdiagramm
 
-**Ejemplo programático**
+![Builder sequence diagram](./etc/builder.urm.png)
 
-La alternativa sensata es utilizar el patrón Builder. En primer lugar, tenemos a nuestro héroe `Hero` que queremos
-crear:
+## Programmbeispiel
+
+In diesem Beispiel konstruieren wir verschiedene Typen von `Hero`-Objekten mit wechselnden Attributen.
+
+Stellen Sie sich einen Charakter-Generator in einem Rollenspiel vor. Die einfachste Option ist es,
+den Charakter komplett vom Computer erstellen zu lassen. Manchmal will der Spieler aber selbst bestimmte
+Eigenschaften des Charakters auswählen, etwa Beruf, Geschlecht, Haarfarbe etc. Dies ist ein schrittweiser Prozess, der erst abgeschlossen ist, wenn alle gewünschten Eigenschaften
+festgelegt wurden.
+
+Mit dem Builder-Pattern gibt es einen besseren Ansatz dafür.
+Betrachten wir zunächst den `Hero`, den wir erzeugen wollen: 
 
 ```java
 public final class Hero {
-  private final Profession profession;
-  private final String name;
-  private final HairType hairType;
-  private final HairColor hairColor;
-  private final Armor armor;
-  private final Weapon weapon;
+    private final Profession profession;
+    private final String name;
+    private final HairType hairType;
+    private final HairColor hairColor;
+    private final Armor armor;
+    private final Weapon weapon;
 
-  private Hero(Builder builder) {
-    this.profession = builder.profession;
-    this.name = builder.name;
-    this.hairColor = builder.hairColor;
-    this.hairType = builder.hairType;
-    this.weapon = builder.weapon;
-    this.armor = builder.armor;
-  }
+    private Hero(Builder builder) {
+        this.profession = builder.profession;
+        this.name = builder.name;
+        this.hairColor = builder.hairColor;
+        this.hairType = builder.hairType;
+        this.weapon = builder.weapon;
+        this.armor = builder.armor;
+    }
 }
 ```
 
-Luego tenemos al constructor:
+Dazu gibt es den `Builder`:
 
 ```java
   public static class Builder {
@@ -82,78 +100,122 @@ Luego tenemos al constructor:
     private Weapon weapon;
 
     public Builder(Profession profession, String name) {
-      if (profession == null || name == null) {
-        throw new IllegalArgumentException("profession and name can not be null");
-      }
-      this.profession = profession;
-      this.name = name;
+        if (profession == null || name == null) {
+            throw new IllegalArgumentException("profession and name can not be null");
+        }
+        this.profession = profession;
+        this.name = name;
     }
 
     public Builder withHairType(HairType hairType) {
-      this.hairType = hairType;
-      return this;
+        this.hairType = hairType;
+        return this;
     }
 
     public Builder withHairColor(HairColor hairColor) {
-      this.hairColor = hairColor;
-      return this;
+        this.hairColor = hairColor;
+        return this;
     }
 
     public Builder withArmor(Armor armor) {
-      this.armor = armor;
-      return this;
+        this.armor = armor;
+        return this;
     }
 
     public Builder withWeapon(Weapon weapon) {
-      this.weapon = weapon;
-      return this;
+        this.weapon = weapon;
+        return this;
     }
 
     public Hero build() {
-      return new Hero(this);
+        return new Hero(this);
     }
-  }
+}
 ```
 
-Entonces se puede utilizar como:
+Verwendet wird das Ganze dann so:
 
 ```java
-var mage = new Hero.Builder(Profession.MAGE, "Riobard").withHairColor(HairColor.BLACK).withWeapon(Weapon.DAGGER).build();
+  public static void main(String[] args) {
+
+    var mage = new Hero.Builder(Profession.MAGE, "Riobard")
+            .withHairColor(HairColor.BLACK)
+            .withWeapon(Weapon.DAGGER)
+            .build();
+    LOGGER.info(mage.toString());
+
+    var warrior = new Hero.Builder(Profession.WARRIOR, "Amberjill")
+            .withHairColor(HairColor.BLOND)
+            .withHairType(HairType.LONG_CURLY).withArmor(Armor.CHAIN_MAIL).withWeapon(Weapon.SWORD)
+            .build();
+    LOGGER.info(warrior.toString());
+
+    var thief = new Hero.Builder(Profession.THIEF, "Desmond")
+            .withHairType(HairType.BALD)
+            .withWeapon(Weapon.BOW)
+            .build();
+    LOGGER.info(thief.toString());
+}
 ```
 
-## Diagrama de clases
+Programmausgabe:
 
-![alt text](./etc/builder.urm.png "Builder diagrama de clases")
+```
+16:28:06.058 [main] INFO com.iluwatar.builder.App -- This is a mage named Riobard with black hair and wielding a dagger.
+16:28:06.060 [main] INFO com.iluwatar.builder.App -- This is a warrior named Amberjill with blond long curly hair wearing chain mail and wielding a sword.
+16:28:06.060 [main] INFO com.iluwatar.builder.App -- This is a thief named Desmond with bald head and wielding a bow.
+```
 
-## Aplicabilidad
+## Verwendung
 
-Utiliza el patrón Builder cuando
+* Das Builder-Pattern ist ideal für Anwendungen, die komplexe Konstruktoren benötigen.
+* Der Algorithmus zur Erzeugung eines komplexen Objekts sollte unabhängig davon sein, aus
+   welchen Elementen es besteht und wie diese zusammengesetzt werden.
+* Der Konstruktionsprozess muss verschiedene Ausprägungen des konstruierten Objekts erlauben.
+* Besonders nützlich, wenn viele Schritte zur Erzeugung benötigt werden, die in einer bestimmten
+  Reihenfolge ausgeführt werden müssen.
 
-* El algoritmo para crear un objeto complejo debe ser independiente de las partes que componen el objeto y cómo se
-  ensamblan.
-* El proceso de construcción debe permitir diferentes representaciones para el objeto que se construye.
+## Tutorials
 
-## Tutoriales
+* [Builder Design Pattern in Java (DigitalOcean)](https://www.journaldev.com/1425/builder-design-pattern-in-java)
+* [Builder (Refactoring Guru)](https://refactoring.guru/design-patterns/builder)
+* [Exploring Joshua Bloch’s Builder design pattern in Java (Java Magazine)](https://blogs.oracle.com/javamagazine/post/exploring-joshua-blochs-builder-design-pattern-in-java)
 
-* [Refactoring Guru](https://refactoring.guru/design-patterns/builder)
-* [Oracle Blog](https://blogs.oracle.com/javamagazine/post/exploring-joshua-blochs-builder-design-pattern-in-java)
-* [Journal Dev](https://www.journaldev.com/1425/builder-design-pattern-in-java)
+## Reale Anwendungen in Java
 
-## Usos en el mundo real
-
-* [java.lang.StringBuilder](http://docs.oracle.com/javase/8/docs/api/java/lang/StringBuilder.html)
-* [java.nio.ByteBuffer](http://docs.oracle.com/javase/8/docs/api/java/nio/ByteBuffer.html#put-byte-) así como otros
-  buffers
-  como FloatBuffer, IntBuffer, etc.
-* [java.lang.StringBuffer](http://docs.oracle.com/javase/8/docs/api/java/lang/StringBuffer.html#append-boolean-)
-* Todas las implementaciones
-  de [java.lang.Appendable](http://docs.oracle.com/javase/8/docs/api/java/lang/Appendable.html)
-* [Apache Camel builders](https://github.com/apache/camel/tree/0e195428ee04531be27a0b659005e3aa8d159d23/camel-core/src/main/java/org/apache/camel/builder)
+* StringBuilder und StringBuffer konstruieren veränderbare String-Objekte
+* Java.nio.ByteBuffer und ähnliche Klassen wie FloatBuffer, IntBuffer usw.
+* javax.swing.GroupLayout.Group#addComponent()
+* Verschiedene GUI-Builder in IDEs, die GUI-Komponenten bauen.
+* Alle Implementationen von [java.lang.Appendable](http://docs.oracle.com/javase/8/docs/api/java/lang/Appendable.html)
+* [Apache Camel Builder](https://github.com/apache/camel/tree/0e195428ee04531be27a0b659005e3aa8d159d23/camel-core/src/main/java/org/apache/camel/builder)
 * [Apache Commons Option.Builder](https://commons.apache.org/proper/commons-cli/apidocs/org/apache/commons/cli/Option.Builder.html)
 
-## Créditos
+## Vor- und Nachteile
 
-* [Design Patterns: Elements of Reusable Object-Oriented Software](https://www.amazon.com/gp/product/0201633612/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=0201633612&linkCode=as2&tag=javadesignpat-20&linkId=675d49790ce11db99d90bde47f1aeb59)
-* [Effective Java](https://www.amazon.com/gp/product/0134685997/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=0134685997&linkCode=as2&tag=javadesignpat-20&linkId=4e349f4b3ff8c50123f8147c828e53eb)
-* [Head First Design Patterns: A Brain-Friendly Guide](https://www.amazon.com/gp/product/0596007124/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=0596007124&linkCode=as2&tag=javadesignpat-20&linkId=6b8b6eea86021af6c8e3cd3fc382cb5b)
-* [Refactoring to Patterns](https://www.amazon.com/gp/product/0321213351/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=0321213351&linkCode=as2&tag=javadesignpat-20&linkId=2a76fcb387234bc71b1c61150b3cc3a7)
+Vorteile:
+
+* Bessere Kontrolle des Konstruktionsprozesses als bei anderen Erzeugungsmustern.
+* Ermöglicht schrittweise Konstruktion, Verschiebung von Schritten und rekursiven Ablauf der Schritte.
+* Kann Objekte konstruieren, die eine komplexe Zusammenstellung von Teilobjekten erfordern.
+  Dabei wird das Gesamtobjekt von den Teilen und dem Prozess des Zusammenfügens getrennt.
+* Prinzip der eindeutigen Verantwortlichkeit: Komplexer Konstruktionscode kann von der Geschäftslogik getrennt werden. 
+
+Nachteile:
+
+* Der Code kann insgesamt komplexer werden, weil zusätzliche Klassen benötigt werden.
+* Durch die Builder-Objekte kann sich der Speicherverbrauch erhöhen.
+
+## Verwandte Patterns
+
+* [Abstract Factory](https://java-design-patterns.com/patterns/abstract-factory/): Kann gemeinsam mit Builder verwendet werden, um Teile eines komplexen Objekts zu generieren.
+* [Prototype](https://java-design-patterns.com/patterns/prototype/): Builder bauen oft Prototypen nach.
+* [Step Builder](https://java-design-patterns.com/patterns/step-builder/): Eine Variante des Builder-Patterns mit Schritt-für-Schritt-Ansatz.
+  Gute Wahl für Objekte mit einer Vielzahl optionaler Parameter.
+
+## Quellen
+
+* [Design Patterns: Elements of Reusable Object-Oriented Software](https://amzn.to/3w0pvKI)
+* [Effective Java](https://amzn.to/4cGk2Jz)
+* [Head First Design Patterns: Building Extensible and Maintainable Object-Oriented Software](https://amzn.to/49NGldq)
+* [Refactoring to Patterns](https://amzn.to/3VOO4F5)

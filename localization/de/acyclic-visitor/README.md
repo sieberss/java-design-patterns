@@ -1,160 +1,192 @@
 ---
-title: Acyclic Visitor
 shortTitle: Acyclic Visitor
 category: Behavioral
-language: es
+language: de
 tag:
- - Extensibility
+  - Decoupling
+  - Extensibility
+  - Interface
+  - Object composition
 ---
 
-## Propósito
+## Zweck
 
-Permitir añadir nuevas funciones a jerarquías de clases existentes sin que estas se vean afectadas, y sin crear los problemáticos círculos de dependencias que son inherentes al patrón GoF (Gang of Four) Visitor.
+Das Acyclic-Visitor-Pattern entkoppelt Operationen von der Objekthierarchie und erlaubt so ein flexibles Design für verschiedenste Anwendungen.
 
-## Explicación
+## Detailierte Erklärung
 
-Ejemplo del mundo real
+Reales Beispiel
 
-> Tenemos una jerarquía de clases módem. Los modems de esta jerarquía deben ser visitados por un algoritmo externo basándose en unos filtros (el módem es compatible con Unix o DOS).
+> Als Vergleich aus der realen analogen Welt soll ein System von Museumsführern dienen.
+> Stellen Sie sich ein Museum mit verschiedensten Ausstellungsstücken (Bilder, Skulpturen, historische Artefakte, ...) vor.
+> Es gibt dort verschiedene Typen von Führern (Menschen, Audio-Guides, VR-Führer), die zu jedem Objekt Informationen geben.
+> Wenn nun eine neue Art der Führung eingeführt wird, muss nicht jedes Ausstellungsstück dafür angepasst werden.
+> Stattdessen implementiert jeder Führer eine Schnittstelle zu den jeweiligen Ausstellungstücken.
+> Auf diese Weise ist das System leicht erweiterbar.
 
-En otras palabras
+In einfachen Worten
 
-> Acyclic Visitor permite añadir funciones a jerarquías de clases existentes sin modificarlas.
+> Acyclic Visitor erlaubt das Hinzufügen von Funktionen, ohne die bestehende Hierarchie anpassen zu müssen.
 
-[WikiWikiWeb](https://wiki.c2.com/?AcyclicVisitor) dice
+[WikiWikiWeb](https://wiki.c2.com/?AcyclicVisitor) sagt:
 
-> El patrón Acyclic Visitor permite que nuevas funciones sean añadidas a jerarquías de clases existentes sin afectar a las mismas, y sin crear los círculos de dependencias que son inherentes al patrón de visitante (Visitor Pattern) de GangOfFour.
+> Das Acyclic-Visitor-Pattern erlaubt es, neue Funktionen zu einer bestehenden Klassenhierarchie
+> hinzuzufügen, ohne diese Hierarchie zu verändern und ohne Abhängigkeitszyklen (wie beim Visitor Pattern) zu schaffen.
 
-**Ejemplo Programático**
+Ablaufdiagramm
 
-Aquí tenemos la jerarquía `Modem`.
+![Acyclic Visitor sequence diagram](./etc/acyclic-visitor-sequence-diagram.png "Acyclic Visitor sequence diagram")
+
+
+## Programmbeispiel
+
+Wir betrachten eine Hierarchie von Modem-Klassen. Die Modems werden besucht von einem externen Algorithmus,
+der auf Filterkritien (Unix- oder DOS-Kompatibilität) basiert.
+
+Here die `Modem` Hierarchie.
 
 ```java
 public abstract class Modem {
-  public abstract void accept(ModemVisitor modemVisitor);
+    public abstract void accept(ModemVisitor modemVisitor);
 }
 
 public class Zoom extends Modem {
-  ...
-  @Override
-  public void accept(ModemVisitor modemVisitor) {
-    if (modemVisitor instanceof ZoomVisitor) {
-      ((ZoomVisitor) modemVisitor).visit(this);
-    } else {
-      LOGGER.info("Only ZoomVisitor is allowed to visit Zoom modem");
+
+    // Weitere Eigenschaften und Methoden ...
+
+    @Override
+    public void accept(ModemVisitor modemVisitor) {
+        if (modemVisitor instanceof ZoomVisitor) {
+            ((ZoomVisitor) modemVisitor).visit(this);
+        } else {
+            LOGGER.info("Only ZoomVisitor is allowed to visit Zoom modem");
+        }
     }
-  }
 }
 
 public class Hayes extends Modem {
-  ...
-  @Override
-  public void accept(ModemVisitor modemVisitor) {
-    if (modemVisitor instanceof HayesVisitor) {
-      ((HayesVisitor) modemVisitor).visit(this);
-    } else {
-      LOGGER.info("Only HayesVisitor is allowed to visit Hayes modem");
+
+    // Weitere Eigenschaften und Methoden...
+
+    @Override
+    public void accept(ModemVisitor modemVisitor) {
+        if (modemVisitor instanceof HayesVisitor) {
+            ((HayesVisitor) modemVisitor).visit(this);
+        } else {
+            LOGGER.info("Only HayesVisitor is allowed to visit Hayes modem");
+        }
     }
-  }
 }
 ```
 
-Después tenemos la jerarquía `ModemVisitor`.
+Danach führen wir die `ModemVisitor` Hierarchie ein.
 
 ```java
 public interface ModemVisitor {
 }
 
 public interface HayesVisitor extends ModemVisitor {
-  void visit(Hayes hayes);
+    void visit(Hayes hayes);
 }
 
 public interface ZoomVisitor extends ModemVisitor {
-  void visit(Zoom zoom);
+    void visit(Zoom zoom);
 }
 
 public interface AllModemVisitor extends ZoomVisitor, HayesVisitor {
 }
 
 public class ConfigureForDosVisitor implements AllModemVisitor {
-  ...
-  @Override
-  public void visit(Hayes hayes) {
-    LOGGER.info(hayes + " used with Dos configurator.");
-  }
-  @Override
-  public void visit(Zoom zoom) {
-    LOGGER.info(zoom + " used with Dos configurator.");
-  }
+
+    // Weitere Eigenschaften und Methoden...
+
+    @Override
+    public void visit(Hayes hayes) {
+        LOGGER.info(hayes + " used with Dos configurator.");
+    }
+
+    @Override
+    public void visit(Zoom zoom) {
+        LOGGER.info(zoom + " used with Dos configurator.");
+    }
 }
 
 public class ConfigureForUnixVisitor implements ZoomVisitor {
-  ...
-  @Override
-  public void visit(Zoom zoom) {
-    LOGGER.info(zoom + " used with Unix configurator.");
-  }
+
+    // Weitere Eigenschaften und Methoden...
+
+    @Override
+    public void visit(Zoom zoom) {
+        LOGGER.info(zoom + " used with Unix configurator.");
+    }
 }
 ```
 
-Finalmente, aquí están los "visitors" en acción.
+Schließlich die Visitors im Einsatz.
 
 ```java
+public static void main(String[] args) {
     var conUnix = new ConfigureForUnixVisitor();
     var conDos = new ConfigureForDosVisitor();
+
     var zoom = new Zoom();
     var hayes = new Hayes();
-    hayes.accept(conDos);
-    zoom.accept(conDos);
-    hayes.accept(conUnix);
-    zoom.accept(conUnix);   
+
+    hayes.accept(conDos); // Hayes modem with Dos configurator
+    zoom.accept(conDos); // Zoom modem with Dos configurator
+    hayes.accept(conUnix); // Hayes modem with Unix configurator
+    zoom.accept(conUnix); // Zoom modem with Unix configurator   
+}
 ```
 
-Output del programa:
+Programausgabe:
 
 ```
-    // Hayes modem used with Dos configurator.
-    // Zoom modem used with Dos configurator.
-    // Only HayesVisitor is allowed to visit Hayes modem
-    // Zoom modem used with Unix configurator.
+09:15:11.125 [main] INFO com.iluwatar.acyclicvisitor.ConfigureForDosVisitor -- Hayes modem used with Dos configurator.
+09:15:11.127 [main] INFO com.iluwatar.acyclicvisitor.ConfigureForDosVisitor -- Zoom modem used with Dos configurator.
+09:15:11.127 [main] INFO com.iluwatar.acyclicvisitor.Hayes -- Only HayesVisitor is allowed to visit Hayes modem
+09:15:11.127 [main] INFO com.iluwatar.acyclicvisitor.ConfigureForUnixVisitor -- Zoom modem used with Unix configurator.
 ```
 
-## Diagrama de clases
+## Verwendung
 
-![alt text](./etc/acyclic-visitor.png "Acyclic Visitor")
+* Wenn Sie zu einer bestehenden Hierarchie eine neue Funktion hinzufügen müssen, ohne die Hierarchie zu verändern.
+* Wenn es Funktionen gibt, die zwar auf einer Hierarchie arbeiten, aber nicht selbst dazu gehören (Wie die Configure-Funktionen im obigen Beispiel).
+* Wenn abhängig vom Objekttyp sehr unterschiedliche Funktionen auszuführen sind.
+* Wenn die zu besuchende Klassenhierarchie häufig um neue Kindklassen erweitert wird.
+* When the visited class hierarchy will be frequently extended with new derivatives of the Element class.
+* Wenn es sehr aufwendig ist, die neuen Kindklassen zu kompilieren, zu verlinken, zu testen oder zu verteilen.
 
-## Aplicación
+## Tutorials
 
-Este patrón puede ser usado:
+* [The Acyclic Visitor Pattern (Code Crafter)](https://codecrafter.blogspot.com/2012/12/the-acyclic-visitor-pattern.html)
 
-* Cuando necesitas añadir una nueva función a una jerarquía de clases sin que esta se vea afectada o alterada.
-* Cuando hay funciones que operan sobre la jerarquía, pero no pertenecen a la jerarquía como tal. Las clases ConfigureForDOS / ConfigureForUnix / ConfigureForX por ejemplo.
-* Cuando necesitas ejecutar operaciones muy diferentes en un objeto dependiendo de su tipo.
-* Cuando la jerarquía visitada va a ser frecuentemente extendida con derivados de la clase elemento.
-* Cuando el proceso de volver a compilar, enlazar, probar o distribuir los derivados de la clase elemento es muy pesado.
+## Vor- und Nachteile
 
-## Tutoriales
+Vorteile:
 
-* [Acyclic Visitor Pattern Example](https://codecrafter.blogspot.com/2012/12/the-acyclic-visitor-pattern.html)
+* Erweiterbarkeit: Neue Funktionen können leicht hinzugefügt werden, ohne die Objektstruktur zu verändern.
+* Entkopplung: Kopplung zwischen Objekten und den auf ihnen stattfindenden Operationen wird reduziert.
+* Keine Abhängigkeitszyklen:  Abhängigkeiten sind azyklisch, Wartbarkeit verbessert sich, Komplexität wird reduziert.
+  
+Nachteile:
 
-## Consecuencias
+* Komplexität: Viele erforderliche Visitor-Interfaces können die Komplexität erhöhen.
+* Wartbarkeit: Änderungen an der Objekthierarchie erfordern Updates aller Visitoren.
 
-Buenas:
+## Verwandte Patterns
 
-* No hay círculos de dependencias entre las jerarquías.
-* No es necesario compilar todos los visitantes si se añade uno nuevo.
-* No provoca errores de compilación en visitantes existentes si la jerarquía tiene un nuevo miembro.
+* [Composite](https://java-design-patterns.com/patterns/composite/):
+Wird oft zusammen mit Acyclic Visitor verwendet, um einzelne Objekte und Zusammensetzungen aus ihnen einheitlich zu behandeln.
+* [Decorator](https://java-design-patterns.com/patterns/decorator/):
+Can als Ergänzung eingesetzt werden, um Objekten Verantwortlichkeiten dynamisch zuzuweisen.
+* [Visitor](https://java-design-patterns.com/patterns/visitor/): Acyclic Visitor ist eine Variante des Visitor Patterns, die zyklische Abhängigkeiten vermeidet.
 
-Malas:
+## Quellen
 
-* Viola el [Principio de sustitución de Liskov](https://java-design-patterns.com/principles/#liskov-substitution-principle) al mostrar que puede aceptar todos los visitantes solamente estando interesado en uno en particular.
-* Hay que crear una jerarquía de visitantes paralela para todos los miembros de una jerarquía visitable.
-
-## Patrones relacionados
-
-* [Visitor Pattern](https://java-design-patterns.com/patterns/visitor/)
-
-## Créditos
-
-* [Acyclic Visitor by Robert C. Martin](http://condor.depaul.edu/dmumaugh/OOT/Design-Principles/acv.pdf)
-* [Acyclic Visitor in WikiWikiWeb](https://wiki.c2.com/?AcyclicVisitor)
+* [Design Patterns: Elements of Reusable Object-Oriented Software](https://amzn.to/3w0pvKI)
+* [Head First Design Patterns: Building Extensible and Maintainable Object-Oriented Software](https://amzn.to/49NGldq)
+* [Java Design Patterns: A Hands-On Experience with Real-World Examples](https://amzn.to/3yhh525)
+* [Patterns in Java: A Catalog of Reusable Design Patterns Illustrated with UML](https://amzn.to/4bOtzwF)
+* [Acyclic Visitor (Robert C. Martin)](http://condor.depaul.edu/dmumaugh/OOT/Design-Principles/acv.pdf)
+* [Acyclic Visitor (WikiWikiWeb)](https://wiki.c2.com/?AcyclicVisitor)

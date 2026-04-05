@@ -1,68 +1,73 @@
 ---
-title: Prototype
 shortTitle: Prototype
 category: Creational
-language: es
-tag:
-  - Gang Of Four
+language: de
+tag: 
+  - Gang of Four
   - Instantiation
+  - Object composition
+  - Polymorphism
 ---
 
-## Propósito
+## Alternativbezeichnung 
 
-Especificar los tipos de objetos a crear utilizando una instancia prototípica, y crear nuevos objetos copiando este
-prototipo
+* Klon
 
-## Explicación
+## Zweck
 
-Primero, debe notarse que el patrón Prototype no se utiliza para obtener beneficios de rendimiento. Solo se utiliza para
-crear nuevos objetos a partir de instancias prototipo.
+Das Prototyp-Pattern spezifiziert die Art von Objekten, die erzeugt werden sollen,
+durch eine prototypische Instanz. Neue Instanzen werden durch Klonen des Objekts erzeugt.
 
-Ejemplo del mundo real
+## Detaillierte Erklärung
 
-> ¿Recuerdas a Dolly? ¡La oveja que fue clonada! No entremos en detalles, pero el punto clave aquí es que todo se trata
-> de clonación.
+Reales Beispiel
 
-En palabras simples
+> Stellen Sie sich einen Hersteller von Designmöbeln vor. Wenn eine Bestellung eintrifft, wird
+> nicht von Grund auf ein ganz neues Design entwickelt. Stattdessen werden von den beliebtesten
+> Designs Prototypen vorgehalten. Bei einer Bestellung zu einem bestimmten Design wird der
+> zugehörige Prototyp kopiert, ggfs. mit speziellen Anpassungen gemäß Kundenwunsch.
+> Dieser Ansatz spart Zeit und Ressourcen, weil die Grundkonstruktion und die Designdetails
+> bereits vorhanden sind, sodass Bestellungen schnell und in gleichbleibender Qualität erledigt werden können.
+> quality.
+>
+> Wie bei den Möbelstücken dienen auch bei Java-Objekten die Prototypen als Vorlage, um effizient neue Objekte erzeugen zu können.
 
-> Crea un objeto basado en un objeto existente a través de la clonación.
+In einfachen Worten
 
-Wikipedia dice
+> Erzeuge ein neues Objekt durch Klonen eines existierenden.
 
-> El patrón de prototipo es un patrón de diseño de creación en el desarrollo de software. Se utiliza cuando el tipo de
-> objetos a crear está determinado por una instancia prototípica, que se clona para producir nuevos objetos.
+Wikipedia sagt:
 
-En resumen, te permite crear una copia de un objeto existente y modificarla según tus necesidades, en lugar de pasar por
-el problema de crear un objeto desde cero y configurarlo.
+> Prototype ist ein Erzeugungsmuster in der Softwareentwicklung.
+> Es wird verwendet, wenn der Typ eines zu erzeugenden Objekts durch eine prototypische Instanz vorgegeben ist,
+> die dann geklont wird.
 
-**Ejemplo Programático**
+Ablaufdiagramm
 
-En Java, se recomienda implementar el patrón prototipo de la siguiente manera. En primer lugar, cree una interfaz con un
-método para clonar objetos. En este ejemplo, la interfaz `Prototype` logra esto con su método `copy`.
+![Prototype sequence diagram](./etc/prototype-sequence-diagram.png)
+
+## Programmbeispiel
+
+Folgende Implementation in Java wird empfohlen. 
+Zunächst schreibt man eine Schnittstelle mit einer Methode zum Klonen.
+In diesem Beispiel ist dies die abstrakte Klasse `Prototype` mit ihrer `copy`-Methode.
 
 ```java
 public abstract class Prototype<T> implements Cloneable {
-    @SneakyThrows
     public T copy() {
         return (T) super.clone();
     }
 }
 ```
 
-Nuestro ejemplo contiene una jerarquía de diferentes criaturas. Por ejemplo, veamos las clases `Beast` y `OrcBeast`.
+Das Beispiel enthält eine Hierarchie verschiedener Kreaturen. Betrachten wir exemplarisch die Klassen
+`Beast` and `OrcBeast`.
 
 ```java
-@EqualsAndHashCode(callSuper = false)
-@NoArgsConstructor
 public abstract class Beast extends Prototype<Beast> {
-
-  public Beast(Beast source) {
-  }
-
+  public Beast(Beast source) {}
 }
 
-@EqualsAndHashCode(callSuper = false)
-@RequiredArgsConstructor
 public class OrcBeast extends Beast {
 
   private final String weapon;
@@ -76,25 +81,25 @@ public class OrcBeast extends Beast {
   public String toString() {
     return "Orcish wolf attacks with " + weapon;
   }
-
 }
 ```
 
-No queremos entrar en demasiados detalles, pero el ejemplo completo contiene también las clases base `Mage` y `Warlord`
-y hay implementaciones especializadas para los elfos además de para los orcos.
+In dieser Erklärung beschränken wir uns auf die Grundlagen. Der komplette Beispielcode
+enthält auch die
+Basisklassen `Mage` und `Warlord` und es gibt spezielle Implementationen für Elfen and Orks.
 
-Para aprovechar al máximo el patrón prototipo, creamos las clases `HeroFactory` y `HeroFactoryImpl` para producir
-diferentes tipos de criaturas a partir de prototipos.
+Um das Prototyp-Pattern voll auszunutzen, schreiben wir das Interface `HeroFactory` und die implementierende Klasse
+`HeroFactoryImpl` zur Erzeugung verschiedener Arten von Kreaturen.
 
 ```java
 public interface HeroFactory {
-  
   Mage createMage();
   Warlord createWarlord();
   Beast createBeast();
 }
+```
 
-@RequiredArgsConstructor
+```java
 public class HeroFactoryImpl implements HeroFactory {
 
   private final Mage mage;
@@ -115,14 +120,14 @@ public class HeroFactoryImpl implements HeroFactory {
 }
 ```
 
-Ahora, somos capaces de mostrar el patrón prototipo completo en acción produciendo nuevas criaturas clonando instancias
-existentes.
+Nun können wir sehen, wie mit dem Pattern neue Kreaturen durch das Klonen vorhandener Instanzen erschaffen werden.
 
 ```java
+public static void main(String[] args) {
     var factory = new HeroFactoryImpl(
-        new ElfMage("cooking"),
-        new ElfWarlord("cleaning"),
-        new ElfBeast("protecting")
+            new ElfMage("cooking"),
+            new ElfWarlord("cleaning"),
+            new ElfBeast("protecting")
     );
     var mage = factory.createMage();
     var warlord = factory.createWarlord();
@@ -132,9 +137,9 @@ existentes.
     LOGGER.info(beast.toString());
 
     factory = new HeroFactoryImpl(
-        new OrcMage("axe"),
-        new OrcWarlord("sword"),
-        new OrcBeast("laser")
+            new OrcMage("axe"),
+            new OrcWarlord("sword"),
+            new OrcBeast("laser")
     );
     mage = factory.createMage();
     warlord = factory.createWarlord();
@@ -142,40 +147,57 @@ existentes.
     LOGGER.info(mage.toString());
     LOGGER.info(warlord.toString());
     LOGGER.info(beast.toString());
+}
 ```
 
-Esta es la salida de la consola al ejecutar el ejemplo.
+Hier die Konsolenausgabe
 
 ```
-Elven mage helps in cooking
-Elven warlord helps in cleaning
-Elven eagle helps in protecting
-Orcish mage attacks with axe
-Orcish warlord attacks with sword
-Orcish wolf attacks with laser
+08:36:19.012 [main] INFO com.iluwatar.prototype.App -- Elven mage helps in cooking
+08:36:19.013 [main] INFO com.iluwatar.prototype.App -- Elven warlord helps in cleaning
+08:36:19.014 [main] INFO com.iluwatar.prototype.App -- Elven eagle helps in protecting
+08:36:19.014 [main] INFO com.iluwatar.prototype.App -- Orcish mage attacks with axe
+08:36:19.014 [main] INFO com.iluwatar.prototype.App -- Orcish warlord attacks with sword
+08:36:19.014 [main] INFO com.iluwatar.prototype.App -- Orcish wolf attacks with laser
 ```
 
-## Diagrama de Clases
+## Verwendung
+* Wenn die zu instanziierenden Klassen erst zur Laufzeit festgelegt werden, etwa durch dynamisches Laden.
+* Zur vermeidung einer Klassenhierarchie von Fabriken parallel zur Klassenhierarchie von Produkten.
+* Wenn Instanzen einer Klasse nur wenige verschiedene Zustände haben, kann es bequemer sein, Prototypen
+zu klonen, als jedesmal die Klasse mit passendem Zustand zu instanziieren.
+* Wenn das Erzeugen von Objekten aufwendiger ist als Klonen.
+* Wenn erst zur Laufzeit bestimmt wird, welche konkreten Klassen instanziiert werden müssen.
 
-![alt text](./etc/prototype.urm.png "Prototype pattern class diagram")
+## Echte Java-Anwendungen
+* Die `Object.clone()`-Methode is eine klassische Implementation des Prototyp-Patterns.
+* GUI Libraries verwenden oft Prototypes für Buttons, Fenster, und andere Widgets.
+* In der Spieleentwicklung können viele Objekte (wie Gegner-Charaktere) mit ähnlichen Attributen erzeugt werden.
 
-## Aplicabilidad
+## Vor- und Nachteile
+Vorteile:
 
-Utilice el patrón Prototipo cuando un sistema deba ser independiente de cómo se crean, componen, representan sus
-productos y
+* Verbirgt die Komplexitäten der Objektinstanziierung
+* Reduziert die Zahl der Klassen
+* Erlaubt das Hinzufügen und Entfernen von Objekten zur Laufzeit
 
-* Cuando las clases a instanciar se especifican en tiempo de ejecución, por ejemplo, mediante carga dinámica.
-* Para evitar construir una jerarquía de clases de fábricas paralela a la jerarquía de clases de productos.
-* Cuando las instancias de una clase solo pueden tener una de unas pocas combinaciones diferentes de estado. Puede ser
-  más conveniente instalar un número correspondiente de prototipos y clonarlos en lugar de instanciar la clase
-  manualmente, cada vez con el estado apropiado.
-* Cuando la creación de objetos es costosa en comparación con la clonación.
+Nachteile:
 
-## Usos conocidos
+* Implementation eines möglicherweise komplexen Klon-Mechanismus erforderlich
+* Requires implementing a cloning mechanism which might be complex.
+* Deep Cloning kann Schwierigkeiten bei der korrekten Implementation bereiten,
+  insbesondere bei komplexen Objektgraphen mit zirkulären Referenzen
 
-* [java.lang.Object#clone()](http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#clone%28%29)
+## Verwandte Patterns
 
-## Créditos
+* [Abstract Factory](https://java-design-patterns.com/patterns/abstract-factory/): Beide betreffen das Erzeugen von Objekten,
+* aber Abstract Factory verwendet dafür Factory-Methoden statt Klonen.
+* [Singleton](https://java-design-patterns.com/patterns/singleton/): Singleton kann Prototyp zur Objekterzeugung verwenden, wenn die einzige Instanz geklont werden darf.
+* [Composite](https://java-design-patterns.com/patterns/composite/): Prototypen werden oft innerhalb von Composites verwendet, um Komponentenbäume dynamisch kreieren zu können.
 
-* [Design Patterns: Elements of Reusable Object-Oriented Software](https://www.amazon.com/gp/product/0201633612/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=0201633612&linkCode=as2&tag=javadesignpat-20&linkId=675d49790ce11db99d90bde47f1aeb59)
-* [Head First Design Patterns: A Brain-Friendly Guide](https://www.amazon.com/gp/product/0596007124/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=0596007124&linkCode=as2&tag=javadesignpat-20&linkId=6b8b6eea86021af6c8e3cd3fc382cb5b)
+## Quellen
+
+* [Design Patterns: Elements of Reusable Object-Oriented Software](https://amzn.to/3w0pvKI)
+* [Effective Java](https://amzn.to/4cGk2Jz)
+* [Head First Design Patterns: Building Extensible and Maintainable Object-Oriented Software](https://amzn.to/49NGldq)
+* [Java Design Patterns: A Hands-On Experience with Real-World Examples](https://amzn.to/3yhh525)

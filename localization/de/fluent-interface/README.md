@@ -82,7 +82,7 @@ public interface FluentIterable<E> extends Iterable<E> {
 }
 ```
 
-`SimpleFluentIterable` betreibt gierige Auswertung und wäre für eine reale Anwendung zu rechenintensiv.
+`SimpleFluentIterable` betreibt eifrige Auswertung und wäre für eine reale Anwendung zu rechenintensiv.
 
 ```java
 public class SimpleFluentIterable<E> implements FluentIterable<E> {
